@@ -1,0 +1,130 @@
+{
+	"info": {
+		"_postman_id": "f21e42d1-36c6-45f1-8831-4f5691da9aa9",
+		"name": "cdc-project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2578859",
+		"_collection_link": "https://blue-crater-670110.postman.co/workspace/cdc-project~7ed6f1e4-88de-4a4e-8d13-fb93c13e24d1/collection/2578859-f21e42d1-36c6-45f1-8831-4f5691da9aa9?action=share&source=collection_link&creator=2578859"
+	},
+	"item": [
+		{
+			"name": "source",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"connector.class\": \"io.debezium.connector.mysql.MySqlConnector\",\n    \"tasks.max\": \"1\",\n    \"database.hostname\": \"host.docker.internal\",\n    \"database.port\": \"3306\",\n    \"database.user\": \"root\",\n    \"database.password\": \"root\",\n    \"database.dbname\": \"order_db\",\n    \"database.server.id\": \"10000\",\n    \"database.server.name\": \"mysql_server\",\n    \"table.include.list\": \"order_db.customer\",\n    \"database.history.kafka.bootstrap.servers\": \"kafka:9093\",\n    \"schema.history.internal.kafka.bootstrap.servers\": \"kafka:9093\",\n    \"database.history.kafka.topic\": \"schema-changes.order_db\",\n    \"schema.history.internal.kafka.topic\": \"order_db.schema.history\",\n    \"topic.naming.strategy\": \"io.debezium.schema.SchemaTopicNamingStrategy\",\n    \"topic.prefix\": \"orderdb\",\n    \"topic.delimiter\": \"_\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors/order-db-source-connector/config",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"order-db-source-connector",
+						"config"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sink",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"connector.class\": \"io.debezium.connector.jdbc.JdbcSinkConnector\",\n  \"tasks.max\": \"1\",\n  \"connection.url\": \"jdbc:mysql://host.docker.internal:3306/payment_db\",\n  \"connection.username\": \"root\",\n  \"connection.password\": \"root\",\n  \"insert.mode\": \"upsert\",\n  \"primary.key.mode\": \"record_value\",\n  \"primary.key.fields\": \"id\",\n  \"schema.evolution\": \"none\",\n  \"table.name.format\": \"${topic}_sink\",\n  \"topics\": \"orderdb_customer\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors/payment-db-sink-connector/config",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"payment-db-sink-connector",
+						"config"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all connectors",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/connectors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "view",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/connectors/order-db-source-connector",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"order-db-source-connector"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/connectors/payment-db-sink-connector",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"payment-db-sink-connector"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,13 @@
+{
+  "connector.class": "io.debezium.connector.jdbc.JdbcSinkConnector",
+  "tasks.max": "1",
+  "connection.url": "jdbc:mysql://${DB_HOST}:${DB_PORT}/${PAYMENT_DB_NAME}",
+  "connection.username": "${DB_USER}",
+  "connection.password": "${DB_PASSWORD}",
+  "insert.mode": "upsert",
+  "primary.key.mode": "record_value",
+  "primary.key.fields": "id",
+  "schema.evolution": "none",
+  "table.name.format": "${topic}_sink",
+  "topics": "orderdb_customer,orderdb_order"
+}

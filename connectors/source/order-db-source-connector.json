@@ -1,0 +1,19 @@
+{
+  "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+  "tasks.max": "1",
+  "database.hostname": "${DB_HOST}",
+  "database.port": "${DB_PORT}",
+  "database.user": "${DB_USER}",
+  "database.password": "${DB_PASSWORD}",
+  "database.dbname": "${ORDER_DB_NAME}",
+  "database.server.name": "mysql_server",
+  "table.include.list": "${ORDER_DB_NAME}.customer,${ORDER_DB_NAME}.order",
+  "database.history.kafka.bootstrap.servers": "${KAFKA_BROKER}",
+  "database.history.kafka.topic": "schema-changes.${ORDER_DB_NAME}",
+  "database.server.id": "10000",
+  "schema.history.internal.kafka.bootstrap.servers": "${KAFKA_BROKER}",
+  "schema.history.internal.kafka.topic": "order_db.schema.history",
+  "topic.prefix": "orderdb",
+  "topic.delimiter": "_",
+  "topic.naming.strategy": "io.debezium.schema.SchemaTopicNamingStrategy"
+}
